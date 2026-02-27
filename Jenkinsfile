@@ -38,10 +38,5 @@ pipeline {
             }
         }
 
-        stage("Build Image") {
-            steps {
-                sh 'docker build -t my-express-app:1.0 .'
-            }
-        }
     }
 }
