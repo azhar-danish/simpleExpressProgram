@@ -43,5 +43,21 @@ pipeline {
                 sh 'docker build -t my-express-app:1.0 .'
             }
         }
+        
+        stage('Run Container') {
+            steps {
+                sh """
+                    # Stop the old container if it exists
+                    docker stop my-app-instance || true
+                    docker rm my-app-instance || true
+                    
+                    # Run the new container
+                    docker run -d \
+                    --name my-app-instance \
+                    -p 3000:3000 \
+                    my-express-app:1.0
+                """
+            }
+        }
     }
 }
