@@ -3,7 +3,7 @@ const app = express()
 const port = 3000
 
 app.get('/', (req, res) => {
-  res.send('Hello World! hello azhar,This is deployment.Hello AGL')
+  res.send('Hello World! hello azhar,This is deployment.Hello AGLites')
 })
 app.get('/home', (req, res) => {
   res.send('Welcom to home')
