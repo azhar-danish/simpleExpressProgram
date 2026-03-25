@@ -1,9 +1,13 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const os = require('os');
 
 app.get('/', (req, res) => {
-  res.send('Hello World! hello azhar,This is deployment.Hello AGLites')
+  const podName = os.hostname();
+  console.log(`Request handled by pod: ${podName}`);
+  res.send(`Hello from Kubernetes! \nResponse served by Pod: ${podName}\n`);
+  //res.send('Hello World! hello azhar,This is deployment.Hello AGLites')
 })
 app.get('/home', (req, res) => {
   res.send('Welcom to home')
