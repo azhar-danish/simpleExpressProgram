@@ -33,7 +33,7 @@ pipeline {
 
         stage("Build") {
             steps {
-                // Runs the 'build' script (usually for React/Production)
+                // Runs the 'build' script 
                 sh 'npm run build'
             }
         }
@@ -43,7 +43,12 @@ pipeline {
                 sh 'docker build -t my-express-app:1.0 .'
             }
         }
-
+        stage('Cleanup') {
+            steps {
+                //Deletes unused images and build cache to free up EC2 disk space
+                sh 'docker image prune -f'
+            }
+        }
         stage('Run Container') {
             steps {
                 sh """
