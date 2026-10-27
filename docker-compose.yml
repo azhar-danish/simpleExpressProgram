@@ -1,8 +1,10 @@
-jango_app:
-    build:
-      context: .
-    image: express-app:latest
-    container_name: "express-app"
-    ports:
-      - "3000:3000"
+version: "3.8"
+services:
+    express_app:
+        build:
+          context: .
+        image: express-app:latest
+        container_name: "express-app"
+        ports:
+          - "3000:3000"
     
