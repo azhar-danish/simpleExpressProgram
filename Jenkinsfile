@@ -35,6 +35,7 @@ pipeline {
                 echo "Code deploy"
                 // sh "docker stop express-app && docker rm express-app"
                 // sh "docker run -d -p 3000:3000 --name express-app" //
+                
                 script {
                     deploy("express-app",3000,"2.0")
                 }
