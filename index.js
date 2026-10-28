@@ -7,7 +7,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   const podName = os.hostname();
   console.log(`Request handled by pod: ${podName}`);
-  res.send(`Hello from Kubernetes! \nResponse served by Pod: ${podName}\n hello azhar`);
+  res.send(`Hello from Kubernetes! \nResponse served by Pod: ${podName}\n hello azhar,daniyal`);
   //res.send('Hello World! hello azhar,This is deployment.Hello AGLites')
 })
 app.get('/home', (req, res) => {
