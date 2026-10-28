@@ -13,7 +13,7 @@ pipeline {
         stage("Code Build") {
             steps {
                 script {
-                    build("express-app","1.0")
+                    build("express-app","2.0")
                 }
             }
         }
@@ -21,7 +21,7 @@ pipeline {
             steps {
                 echo "pushing image to docker hub"
                 script {
-                    push_image("express-app","1.0")
+                    push_image("express-app","2.0")
                 }
             }
         }
@@ -33,7 +33,7 @@ pipeline {
         stage("Code Deploy") {
             steps {
                 echo "Code deploy"
-                sh "docker compose up -d"
+                sh "docker compose down && docker compose up -d"
             }
         }
     }
