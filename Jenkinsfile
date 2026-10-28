@@ -1,70 +1,39 @@
+@Library("shared-library") _
 pipeline {
-    agent any
-
-    /* This block tells Jenkins to use the Node.js version 
-    configured in 'Global Tool Configuration'. 
-    Make sure the name 'node20' matches what you set up there.
-    */
-    tools {
-        nodejs 'node20' 
-    }
-
+    agent { label "express"}
+    
     stages {
-        stage("Checkout") {
+        stage("Code checkout") {
             steps {
-                // This pulls your code from GitHub
-                checkout scm
+                script {
+                    clone("https://github.com/azhar-danish/simpleExpressProgram.git","main")
+                }
             }
         }
-
-        stage("Install Dependencies") {
+        stage("Code Build") {
             steps {
-                // Just 'npm install' - it reads your package.json
-                sh 'npm install'
+                script {
+                    build("express-app","1.0")
+                }
             }
         }
-
-        stage("Test") {
+        stage("Push Docker Image") {
             steps {
-                // Runs the 'test' script defined in your package.json
-                sh 'npm test'
+                echo "pushing image to docker hub"
+                script {
+                    push_image("express-app","1.0")
+                }
             }
         }
-
-        stage("Build") {
+        stage("Code Test") {
             steps {
-                // Runs the 'build' script 
-                sh 'npm run build'
+                echo "Code testing"
             }
         }
-
-        stage("Build Image") {
+        stage("Code Deploy") {
             steps {
-                sh 'docker build -t my-express-app:1.0 .'
-            }
-        }
-        stage('Cleanup') {
-            steps {
-                //Deletes unused images and build cache to free up EC2 disk space
-                sh 'docker image prune -f'
-            }
-        }
-        stage('Run Container') {
-            steps {
-                sh """
-                    # Find and kill ANY container currently using port 3000
-                    CONTAINER_ID=\$(docker ps -q --filter "publish=3000")
-                    if [ ! -z "\$CONTAINER_ID" ]; then
-                        docker stop \$CONTAINER_ID
-                        docker rm \$CONTAINER_ID
-                    fi
-
-                    # Also remove by name just in case it's a stopped container
-                    docker rm -f my-app-instance || true
-                    
-                    # Now run the new one
-                    docker run -d --name my-app-instance -p 3000:3000 my-express-app:1.0
-                """
+                echo "Code deploy"
+                sh "docker compose up -d"
             }
         }
     }
